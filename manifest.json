@@ -1,0 +1,35 @@
+{
+	"manifest_version": 3,
+	"name": "Profile Clipper",
+	"version": "1.0.2",
+	"description": "同步自动获取旅客登记信息，将信息以JSON字符串格式复制到剪贴板。适用于旅馆业治安管理系统(gdzwfw.gov.cn)",
+	"icons": {
+		"48": "icons/CFicon-48.png"
+	},
+	"permissions": [
+		"tabs",
+		"activeTab",
+		"clipboardRead",
+		"clipboardWrite",
+		"scripting"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"https://api-yst.gdzwfw.gov.cn/yst_gdslgy/hotel/"
+			],
+			"js": [
+				"/content_scripts/content.js",
+				"/content_scripts/handleStorage.js"
+			]
+		}
+	],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"action": {
+		"default_icon": "icons/CFicon-48.png",
+		"default_title": "ProfileClipper",
+		"default_popup": "popup/ProfileClipper.html"
+	}
+}
