@@ -20,7 +20,8 @@
 			],
 			"js": [
 				"/content_scripts/content.js",
-				"/content_scripts/handleStorage.js"
+				"/content_scripts/handleStorage.js",
+				"/content_scripts/guestInfoGetters.js"
 			]
 		}
 	],
