@@ -17,7 +17,6 @@ function cleanLocalStorage() {
 }
 
 function sendToClipboard(guestInfoObj) {	
-	console.log(guestInfoObj)
 
 	const textArea = document.createElement('textarea')
 	textArea.value = JSON.stringify(guestInfoObj)
@@ -48,9 +47,9 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 					return
 				}
 			}
-
 			sendToClipboard(guestInfo)
-			if (!guestInfo.hasOwnProperty('regTime')) {
+			// navigator.clipboard.writeText(JSON.stringify(guestInfo))
+			if (!guestInfo.name.includes('*')) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
 				cleanLocalStorage()
 			}
