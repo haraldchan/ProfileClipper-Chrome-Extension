@@ -17,14 +17,13 @@ function cleanLocalStorage() {
 }
 
 function sendToClipboard(guestInfoObj) {	
-
 	const textArea = document.createElement('textarea')
 	textArea.value = JSON.stringify(guestInfoObj)
-
+			
 	document.body.appendChild(textArea)
 	textArea.select()
 	document.execCommand('Copy')
-	textArea.remove()
+	textArea.remove()	
 }
 
 function addSaveGuestInfo(guestTypes, button, shortcutKey) {
@@ -33,6 +32,7 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 			const currentGuestType = guestTypes.filter((radio) => radio.classList.contains('is-checked'))[0].textContent
 			
 			const guestInfo = getGuestInfo(currentGuestType)
+
 			
 			for (const [key, val] of Object.entries(guestInfo)) {
 				if (key === 'tel') {
@@ -40,15 +40,15 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 					continue
 				}
 				if (key === 'roomNum') {
-					guestInfo.roomNum = val === '' ? 'null ' : val
+					guestInfo.roomNum = val === '' ? ' ' : val
 					continue
 				}
 				if (val === '') {
 					return
 				}
 			}
-			sendToClipboard(guestInfo)
-			// navigator.clipboard.writeText(JSON.stringify(guestInfo))
+
+			navigator.clipboard.writeText(JSON.stringify(guestInfo))
 			if (!guestInfo.name.includes('*')) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
 				cleanLocalStorage()
@@ -80,8 +80,6 @@ function addRadioListener(groupRadio, guestTypes) {
 }
 
 const observer = new MutationObserver(async (mutationsList, observer) => {
-	// const newGuestModal = document.querySelector('div[aria-label="新增旅客"]').parentElement
-	// const modalStatus = window.getComputedStyle(newGuestModal).getPropertyValue('display')
 
 	for (let mutation of mutationsList) {
 		if (mutation.type === 'childList') {
@@ -89,7 +87,6 @@ const observer = new MutationObserver(async (mutationsList, observer) => {
 			const groupRadio = spans.filter((span) => span.innerText === '团体')[0].parentElement
 			const submitBtn = spans.filter((span) => span.innerText === '上报(R)')[0].parentElement
 			const guestTypes = Array.from(spans.filter((span) => span.innerText === '内地旅客')[0].parentElement.parentElement.querySelectorAll('.el-radio'))
-			// const saveIsVisible = spans.filter((span) => span.innerText === '团体')[0].parentElement.classList.contains('is-checked')
 
 			addSaveGuestInfo(guestTypes, submitBtn, 'r')
 
