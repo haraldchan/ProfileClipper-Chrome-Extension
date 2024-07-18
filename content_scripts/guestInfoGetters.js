@@ -62,24 +62,37 @@ function getGuestInfo(guestType) {
 		guestInfo.name = guestInfo.nameLast + ', ' + guestInfo.nameFirst
 	}
 
-	try {
-		const ecoTime = document.querySelector(`label[for="f006"]`).nextElementSibling.getElementsByTagName('input')[0].value
-		const day = +ecoTime.split(' ')[0].split('-')[2] - 2
 
-		const regTime = new Date(ecoTime)
-		regTime.setDate(day)
+	const ecoTime = document.querySelector(`label[for="f006"]`).nextElementSibling.getElementsByTagName('input')[0].value
+	const day = +ecoTime.split(' ')[0].split('-')[2] - 2
 
-		const rYear = regTime.getFullYear()
-		const rMonth = regTime.getMonth() + 1 < 10 ? '0' + (regTime.getMonth() + 1) : regTime.getMonth() + 1
-		const rDay = regTime.getDate() + 1 < 10 ? '0' + (regTime.getDate() + 1) : regTime.getDate() + 1
-		const rHour = regTime.getHours < 10 ? '0' + regTime.getHours() : regTime.getHours()
-		const rMinutes = regTime.getMinutes() < 10 ? '0' + regTime.getMinutes() : regTime.getMinutes()
-		
-		guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
-	} catch {
-		console.log('not update')
-	}
+	const regTime = new Date(ecoTime)
+	regTime.setDate(day)
 
+	const rYear = regTime.getFullYear()
+
+	const rMonth = regTime.getMonth() + 1 < 10 
+		? '0' + (regTime.getMonth() + 1) 
+		: regTime.getMonth() + 1
+
+	const rDay = regTime.getDate() + 1 < 10 
+		? '0' + String(regTime.getDate() + 1) 
+		: regTime.getDate() + 1
+
+	const rHour = regTime.getHours() === 0
+		? '00'
+		: regTime.getHours() < 10 
+			? '0' + String(regTime.getHours())
+			: regTime.getHours()
+
+	const rMinutes = regTime.getMinutes() === 0
+		? '00'
+		: regTime.getMinutes() < 10
+			? '0' + String(regTime.getMinutes()) 
+			: regTime.getMinutes()
+	
+	guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
+	
 	console.log(guestInfo)
 	return guestInfo
 }
