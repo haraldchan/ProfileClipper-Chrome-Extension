@@ -62,7 +62,6 @@ function getGuestInfo(guestType) {
 		guestInfo.name = guestInfo.nameLast + ', ' + guestInfo.nameFirst
 	}
 
-
 	const ecoTime = document.querySelector(`label[for="f006"]`).nextElementSibling.getElementsByTagName('input')[0].value
 	const day = +ecoTime.split(' ')[0].split('-')[2] - 2
 
@@ -79,19 +78,22 @@ function getGuestInfo(guestType) {
 		? '0' + String(regTime.getDate() + 1) 
 		: regTime.getDate() + 1
 
-	const rHour = regTime.getHours() === 0
-		? '00'
-		: regTime.getHours() < 10 
-			? '0' + String(regTime.getHours())
-			: regTime.getHours()
+	const rHour = regTime.getHours() < 10 
+		? '0' + String(regTime.getHours())
+		: regTime.getHours()
 
-	const rMinutes = regTime.getMinutes() === 0
-		? '00'
-		: regTime.getMinutes() < 10
-			? '0' + String(regTime.getMinutes()) 
-			: regTime.getMinutes()
+	const rMinutes = regTime.getMinutes() < 10
+		? '0' + String(regTime.getMinutes()) 
+		: regTime.getMinutes()
 	
 	guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
+
+	const isUpdate = document.querySelector('.el-dialog__title').textContent
+	if (isUpdate === '新增旅客') {
+		guestInfo.isUpdate = false
+	} else if (isUpdate === '修改旅客') {
+		guestInfo.isUpdate = true
+	}
 	
 	console.log(guestInfo)
 	return guestInfo
