@@ -88,11 +88,11 @@ function getGuestInfo(guestType) {
 	
 	guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
 
-	const isUpdate = document.querySelector('.el-dialog__title').textContent
-	if (isUpdate === '新增旅客') {
-		guestInfo.isUpdate = false
-	} else if (isUpdate === '修改旅客') {
-		guestInfo.isUpdate = true
+	const isMod = document.querySelector('.el-dialog__title').textContent
+	if (isMod === '新增旅客') {
+		guestInfo.isMod = false
+	} else if (isMod === '修改旅客') {
+		guestInfo.isMod = true
 	}
 	
 	console.log(guestInfo)
