@@ -53,12 +53,7 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
 				cleanLocalStorage()
 			}
-
-			// remove tsId before confirm submit(上报)
-			if (shortcutKey === 'r') {
-				// TODO: find the suitable element 
-				document.querySelector(`label[for="remark"]`).nextElementSibling.getElementsByTagName('input')[0].value = ''
-			}
+			setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)
 		})
 
 		// binding shortcut keys
