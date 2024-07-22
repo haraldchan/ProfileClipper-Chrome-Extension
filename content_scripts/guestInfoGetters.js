@@ -35,15 +35,19 @@ const fieldLabelPatterns = {
 function getGuestInfo(guestType) {
 	const guestInfo = { identifier, guestType }
 
-	// TODO: find the proper field for storing tsId, pseudo below
-	const remark = document.querySelector(`label[for="remark"]`).nextElementSibling.getElementsByTagName('input')[0]
-	// if there is no tsId,add one. If it is modify, there should be a tsId already
-	if (remark.value = '') {
+	const tsIdStore = document.querySelector('.el-textarea__inner')
+	const changeEvent = new Event('input', {
+		bubbles: true,
+		cancelable: true,
+	})
+
+	if (tsIdStore.value === '') {
 		const tsId = Date.now()
 		guestInfo.tsId = tsId
-		remark.value = tsId
+		tsIdStore.value = tsId
+		tsIdStore.dispatchEvent(changeEvent)
 	} else {
-		guestInfo = remark.value
+		guestInfo.tsId = tsIdStore.value
 	}
 
 	patternToApply =
