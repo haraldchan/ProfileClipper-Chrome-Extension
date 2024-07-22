@@ -49,9 +49,15 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 			}
 
 			navigator.clipboard.writeText(JSON.stringify(guestInfo))
-			if (!guestInfo.name.includes('*')) {
+			if (!guestInfo.name.includes('*') || !guestInfo.idNum.includes('*')) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
 				cleanLocalStorage()
+			}
+
+			// remove tsId before confirm submit(上报)
+			if (shortcutKey === 'r') {
+				// TODO: find the suitable element 
+				document.querySelector(`label[for="remark"]`).nextElementSibling.getElementsByTagName('input')[0].value = ''
 			}
 		})
 

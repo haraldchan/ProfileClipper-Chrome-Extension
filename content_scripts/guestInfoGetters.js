@@ -35,6 +35,17 @@ const fieldLabelPatterns = {
 function getGuestInfo(guestType) {
 	const guestInfo = { identifier, guestType }
 
+	// TODO: find the proper field for storing tsId, pseudo below
+	const remark = document.querySelector(`label[for="remark"]`).nextElementSibling.getElementsByTagName('input')[0]
+	// if there is no tsId,add one. If it is modify, there should be a tsId already
+	if (remark.value = '') {
+		const tsId = Date.now()
+		guestInfo.tsId = tsId
+		remark.value = tsId
+	} else {
+		guestInfo = remark.value
+	}
+
 	patternToApply =
 		guestType === '内地旅客' ? fieldLabelPatterns.mainland : guestType === '港澳台旅客' ? fieldLabelPatterns.hkMoTw : fieldLabelPatterns.foreign
 
@@ -69,23 +80,11 @@ function getGuestInfo(guestType) {
 	regTime.setDate(day)
 
 	const rYear = regTime.getFullYear()
+	const rMonth = regTime.getMonth() + 1 < 10 ? '0' + (regTime.getMonth() + 1) : regTime.getMonth() + 1
+	const rDay = regTime.getDate() + 1 < 10 ? '0' + String(regTime.getDate() + 1) : regTime.getDate() + 1
+	const rHour = regTime.getHours() < 10 ? '0' + String(regTime.getHours()) : regTime.getHours()
+	const rMinutes = regTime.getMinutes() < 10 ? '0' + String(regTime.getMinutes()) : regTime.getMinutes()
 
-	const rMonth = regTime.getMonth() + 1 < 10 
-		? '0' + (regTime.getMonth() + 1) 
-		: regTime.getMonth() + 1
-
-	const rDay = regTime.getDate() + 1 < 10 
-		? '0' + String(regTime.getDate() + 1) 
-		: regTime.getDate() + 1
-
-	const rHour = regTime.getHours() < 10 
-		? '0' + String(regTime.getHours())
-		: regTime.getHours()
-
-	const rMinutes = regTime.getMinutes() < 10
-		? '0' + String(regTime.getMinutes()) 
-		: regTime.getMinutes()
-	
 	guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
 
 	const isMod = document.querySelector('.el-dialog__title').textContent
@@ -94,7 +93,7 @@ function getGuestInfo(guestType) {
 	} else if (isMod === '修改旅客') {
 		guestInfo.isMod = true
 	}
-	
+
 	console.log(guestInfo)
 	return guestInfo
 }
