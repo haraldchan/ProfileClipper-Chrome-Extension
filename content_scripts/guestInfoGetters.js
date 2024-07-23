@@ -77,19 +77,19 @@ function getGuestInfo(guestType) {
 		guestInfo.name = guestInfo.nameLast + ', ' + guestInfo.nameFirst
 	}
 
-	const ecoTime = document.querySelector(`label[for="f006"]`).nextElementSibling.getElementsByTagName('input')[0].value
-	const day = +ecoTime.split(' ')[0].split('-')[2] - 2
+	// const ecoTime = document.querySelector(`label[for="f006"]`).nextElementSibling.getElementsByTagName('input')[0].value
+	// const day = +ecoTime.split(' ')[0].split('-')[2] - 2
 
-	const regTime = new Date(ecoTime)
-	regTime.setDate(day)
+	// const regTime = new Date(ecoTime)
+	// regTime.setDate(day)
 
-	const rYear = regTime.getFullYear()
-	const rMonth = regTime.getMonth() + 1 < 10 ? '0' + (regTime.getMonth() + 1) : regTime.getMonth() + 1
-	const rDay = regTime.getDate() + 1 < 10 ? '0' + String(regTime.getDate() + 1) : regTime.getDate() + 1
-	const rHour = regTime.getHours() < 10 ? '0' + String(regTime.getHours()) : regTime.getHours()
-	const rMinutes = regTime.getMinutes() < 10 ? '0' + String(regTime.getMinutes()) : regTime.getMinutes()
+	// const rYear = regTime.getFullYear()
+	// const rMonth = regTime.getMonth() + 1 < 10 ? '0' + (regTime.getMonth() + 1) : regTime.getMonth() + 1
+	// const rDay = regTime.getDate() + 1 < 10 ? '0' + String(regTime.getDate() + 1) : regTime.getDate() + 1
+	// const rHour = regTime.getHours() < 10 ? '0' + String(regTime.getHours()) : regTime.getHours()
+	// const rMinutes = regTime.getMinutes() < 10 ? '0' + String(regTime.getMinutes()) : regTime.getMinutes()
 
-	guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
+	// guestInfo.regTime = String(rYear) + String(rMonth) + String(rDay) + String(rHour) + String(rMinutes)
 
 	const isMod = document.querySelector('.el-dialog__title').textContent
 	if (isMod === '新增旅客') {
