@@ -53,7 +53,9 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
 				cleanLocalStorage()
 			}
-			setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)
+			if (document.querySelector('.el-dialog__wrapper').style.display === 'none') {
+				setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)			
+			}
 		})
 
 		// binding shortcut keys
