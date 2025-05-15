@@ -16,22 +16,35 @@ function cleanLocalStorage() {
 	}
 }
 
-function sendToClipboard(guestInfoObj) {	
-	const textArea = document.createElement('textarea')
-	textArea.value = JSON.stringify(guestInfoObj)
+// function sendToClipboard(guestInfoObj) {	
+// 	const textArea = document.createElement('textarea')
+// 	textArea.value = JSON.stringify(guestInfoObj)
 			
-	document.body.appendChild(textArea)
-	textArea.select()
-	document.execCommand('Copy')
-	textArea.remove()	
-}
+// 	document.body.appendChild(textArea)
+// 	textArea.select()
+// 	document.execCommand('Copy')
+// 	textArea.remove()	
+// }
 
-function addSaveGuestInfo(modalType, guestTypes, button, shortcutKey) {
+function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 	if (!button.hasAttribute('capture-event-added')) {
 		button.addEventListener('click', () => {
 			const currentGuestType = guestTypes.filter((radio) => radio.classList.contains('is-checked'))[0].textContent
-			const guestInfo = getGuestInfo(currentGuestType)
 			
+			// check for wrong birth year
+			const date = new Date() 
+			const bdInputs = Array.from(document.querySelectorAll(`label[for="csrq"]`)).map(el => el.nextElementSibling.getElementsByTagName('input')[0])
+			for (const bdInput of bdInputs) {
+				console.log(date.getFullYear() - bdInput.value.split('-')[0])
+				if (date.getFullYear() - bdInput.value.split('-')[0] >= 100) {
+					const wrongDate = bdInput.value.split('-')
+					wrongDate[0] = Number(wrongDate[0]) + 100
+					bdInput.value = wrongDate.join('-')
+				}		
+			}
+
+			const guestInfo = getGuestInfo(currentGuestType)
+
 			for (const [key, val] of Object.entries(guestInfo)) {
 				if (key === 'tel') {
 					guestInfo.tel = val === '' ? ' ' : val
@@ -46,10 +59,6 @@ function addSaveGuestInfo(modalType, guestTypes, button, shortcutKey) {
 				}
 			}
 
-			if (shortcutKey === 'v') {
-				guestInfo.isMod = 'reveal'
-			}
-
 			navigator.clipboard.writeText(JSON.stringify(guestInfo))
 			if (!guestInfo.name.includes('*') || !guestInfo.idNum.includes('*')) {
 				localStorage.setItem(new Date().getTime(), JSON.stringify(guestInfo))
@@ -57,15 +66,6 @@ function addSaveGuestInfo(modalType, guestTypes, button, shortcutKey) {
 			}
 			if (document.querySelector('.el-dialog__wrapper').style.display === 'none') {
 				setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)			
-			}
-
-			if (shortcutKey === 'v') {
-				setTimeout(() => navigator.clipboard.readText().then(clip => {
-					if (clip.includes('*')) return 
-					const guest = JSON.parse(clip)
-					console.log(guest)
-					setGuestInfo(guest, modalType)
-				}), 500)
 			}
 		})
 
@@ -97,20 +97,16 @@ const observer = new MutationObserver(async (mutationsList, observer) => {
 
 	for (let mutation of mutationsList) {
 		if (mutation.type === 'childList') {
-			const modalType = document.querySelector('.el-dialog__title').textContent
 			const spans = Array.from(document.getElementsByTagName('span'))
 			const groupRadio = spans.filter((span) => span.innerText === '团体')[0].parentElement
 			const submitBtn = spans.filter((span) => span.innerText === '上报(R)')[0].parentElement
 			const guestTypes = Array.from(spans.filter((span) => span.innerText === '内地旅客')[0].parentElement.parentElement.querySelectorAll('.el-radio'))
 
-			revealBtn.style.display = (modalType === '查看旅客' || modalType === '新增旅客') ? 'none' : 'inline-block'
-
-			addSaveGuestInfo(modalType, guestTypes, submitBtn, 'r')
-			addSaveGuestInfo(modalType, guestTypes, revealBtn, 'v')	
+			addSaveGuestInfo(guestTypes, submitBtn, 'r')
 
 			try {
 				const saveBtn = spans.filter((span) => span.innerText === '保存(S)')[0].parentElement
-				addSaveGuestInfo(modalType, guestTypes, saveBtn, 's')	
+				addSaveGuestInfo(guestTypes, saveBtn, 's')	
 			} catch {
 				addRadioListener(groupRadio, guestTypes)
 			}
