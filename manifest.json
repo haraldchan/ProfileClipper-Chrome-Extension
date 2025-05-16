@@ -21,8 +21,6 @@
 			"js": [
 				"/content_scripts/handleStorage.js",
 				"/content_scripts/guestInfoGetter.js",
-				"/content_scripts/guestInfoSetter.js",
-				"/content_scripts/reveal.js",
 				"/content_scripts/content.js"
 			]
 		}
