@@ -16,7 +16,8 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://api-yst.gdzwfw.gov.cn/yst_gdslgy/hotel/"
+				"https://api-yst.gdzwfw.gov.cn/yst_gdslgy/hotel/",
+				"https://gdlgy.gzjd.gov.cn:8088/hotel/"
 			],
 			"js": [
 				"/content_scripts/handleStorage.js",
