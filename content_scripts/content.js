@@ -31,17 +31,11 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 		button.addEventListener('click', () => {
 			const currentGuestType = guestTypes.filter((radio) => radio.classList.contains('is-checked'))[0].textContent
 			
-			// check for wrong birth year
-			const date = new Date() 
-			const bdInputs = Array.from(document.querySelectorAll(`label[for="csrq"]`)).map(el => el.nextElementSibling.getElementsByTagName('input')[0])
-			for (const bdInput of bdInputs) {
-				console.log(date.getFullYear() - bdInput.value.split('-')[0])
-				if (date.getFullYear() - bdInput.value.split('-')[0] >= 100) {
-					const wrongDate = bdInput.value.split('-')
-					wrongDate[0] = Number(wrongDate[0]) + 100
-					bdInput.value = wrongDate.join('-')
-				}		
-			}
+			// check for wrong birth year(>100) then fix it(+100)
+			validateAndFixBirthday()
+
+			// check if lastname and firstname is duplicated
+			validateForeignGuestNames(currentGuestType)
 
 			const guestInfo = getGuestInfo(currentGuestType)
 
