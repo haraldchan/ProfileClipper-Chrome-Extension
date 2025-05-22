@@ -32,6 +32,12 @@ const fieldLabelPatterns = {
 	},
 }
 
+const guestTypeMap = new Map([
+	['内地旅客', fieldLabelPatterns.mainland],
+	['港澳台旅客', fieldLabelPatterns.hkMoTw],
+	['国外旅客', fieldLabelPatterns.foreign]
+])
+
 function getGuestInfo(guestType) {
 	const guestInfo = { identifier, guestType }
 
@@ -50,11 +56,10 @@ function getGuestInfo(guestType) {
 		guestInfo.tsId = tsIdStore.value
 	}
 
-	patternToApply =
-		guestType === '内地旅客' ? fieldLabelPatterns.mainland : guestType === '港澳台旅客' ? fieldLabelPatterns.hkMoTw : fieldLabelPatterns.foreign
+	const patternToApply = guestTypeMap.get(guestType)
 
-	for (const [key, val] of Object.entries(patternToApply)) {
-		guestInfo[key] = document.querySelector(`label[for="${val}"]`).nextElementSibling.getElementsByTagName('input')[0].value
+	for (const [key, attr] of Object.entries(patternToApply)) {
+		guestInfo[key] = formReader(attr)
 	}
 
 	if (guestType === '港澳台旅客') {
