@@ -16,21 +16,21 @@ function cleanLocalStorage() {
 	}
 }
 
-// function sendToClipboard(guestInfoObj) {	
+// function sendToClipboard(guestInfoObj) {
 // 	const textArea = document.createElement('textarea')
 // 	textArea.value = JSON.stringify(guestInfoObj)
-			
+
 // 	document.body.appendChild(textArea)
 // 	textArea.select()
 // 	document.execCommand('Copy')
-// 	textArea.remove()	
+// 	textArea.remove()
 // }
 
 function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 	if (!button.hasAttribute('capture-event-added')) {
 		button.addEventListener('click', () => {
 			const currentGuestType = guestTypes.filter((radio) => radio.classList.contains('is-checked'))[0].textContent
-			
+
 			// check for wrong birth year(>100) then fix it(+100)
 			validateAndFixBirthday()
 
@@ -59,7 +59,7 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 				cleanLocalStorage()
 			}
 			if (document.querySelector('.el-dialog__wrapper').style.display === 'none') {
-				setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)			
+				setTimeout(() => (document.querySelector('.el-textarea__inner').value = ''), 100)
 			}
 		})
 
@@ -71,7 +71,7 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 		})
 
 		button.setAttribute('capture-event-added', 'true')
-	} 
+	}
 }
 
 function addRadioListener(groupRadio, guestTypes) {
@@ -79,16 +79,15 @@ function addRadioListener(groupRadio, guestTypes) {
 		groupRadio.addEventListener('click', () => {
 			setTimeout(() => {
 				const spans = Array.from(document.getElementsByTagName('span'))
-				const saveBtn = spans.filter((span) => span.innerText === ('保存(S)'))[0].parentElement
-				addSaveGuestInfo(guestTypes, saveBtn, 's')	
-			}, 500);
+				const saveBtn = spans.filter((span) => span.innerText === '保存(S)')[0].parentElement
+				addSaveGuestInfo(guestTypes, saveBtn, 's')
+			}, 500)
 		})
 		groupRadio.setAttribute('capture-event-added', 'true')
-	} 
+	}
 }
 
 const observer = new MutationObserver(async (mutationsList, observer) => {
-
 	for (let mutation of mutationsList) {
 		if (mutation.type === 'childList') {
 			const spans = Array.from(document.getElementsByTagName('span'))
@@ -100,7 +99,7 @@ const observer = new MutationObserver(async (mutationsList, observer) => {
 
 			try {
 				const saveBtn = spans.filter((span) => span.innerText === '保存(S)')[0].parentElement
-				addSaveGuestInfo(guestTypes, saveBtn, 's')	
+				addSaveGuestInfo(guestTypes, saveBtn, 's')
 			} catch {
 				addRadioListener(groupRadio, guestTypes)
 			}
@@ -112,3 +111,14 @@ observer.observe(body, { childList: true })
 
 const url = window.location.href
 chrome.runtime.sendMessage({ type: 'checkUrl', url: url })
+
+document.addEventListener('keyup', async (event) => {
+	if (event.altKey && event.key.toLowerCase() === 'o') {
+		const cbAll = document.querySelector('input[type="checkbox"]')
+		const coAll = Array.from(document.querySelectorAll('span')).find((span) => span.innerText === '批量退房')
+		
+		cbAll.click()
+		await new Promise((res) => setTimeout(res, 200))
+		coAll.click()
+	}
+})

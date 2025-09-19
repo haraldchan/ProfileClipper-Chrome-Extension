@@ -41,6 +41,7 @@ const guestTypeMap = new Map([
 function getGuestInfo(guestType) {
 	const guestInfo = { identifier, guestType }
 
+	// add tsId
 	const tsIdStore = document.querySelector('.el-textarea__inner')
 	const changeEvent = new Event('input', {
 		bubbles: true,
@@ -62,6 +63,15 @@ function getGuestInfo(guestType) {
 		guestInfo[key] = formReader(attr)
 	}
 
+	// formatting room number
+	if (guestInfo.roomNum.length === 3) {
+		guestInfo.roomNum = '0' + guestInfo.roomNum
+		
+		const fjh = document.querySelector(`label[for="fjh"]`).nextElementSibling.getElementsByTagName('input')[0]
+		fjh.value = guestInfo.roomNum
+		fjh.dispatchEvent(changeEvent)
+	}
+
 	if (guestType === '港澳台旅客') {
 		guestInfo.nameLast = Array.from(document.querySelectorAll('.el-form-item__label'))
 			.filter((label) => label.innerText === '英文姓')[0]
@@ -75,7 +85,7 @@ function getGuestInfo(guestType) {
 	}
 
 	if (guestType === '国外旅客' || guestType === '港澳台旅客') {
-		guestInfo.addr = ' '
+		guestInfo.addr = guestInfo.country
 	}
 
 	if (guestType === '国外旅客') {
