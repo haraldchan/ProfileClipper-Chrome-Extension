@@ -62,7 +62,7 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 				cleanLocalStorage()
 			}
 			if (document.querySelector('.el-dialog__wrapper').style.display === 'none') {
-				setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)			
+				setTimeout(() => document.querySelector('.el-textarea__inner').value = '', 100)
 			}
 		})
 
@@ -72,9 +72,27 @@ function addSaveGuestInfo(guestTypes, button, shortcutKey) {
 				button.click()
 			}
 		})
-
+		
+		console.log(document.querySelector('.el-textarea__inner').value)
 		button.setAttribute('capture-event-added', 'true')
 	} 
+}
+
+function addCloseAndClearTextArea(button) {
+	if (!button.hasAttribute('close-event-added')) {
+		button.addEventListener('click', () => {
+			document.querySelector('.el-textarea__inner').value = ''
+		})
+		console.log(document.querySelector('.el-textarea__inner').value)
+
+		document.addEventListener('keyup', (e) => {
+			if (e.key === 'Escape') {
+				button.click()
+			}
+		})
+
+		button.setAttribute('close-event-added', 'true')
+	}
 }
 
 function addRadioListener(groupRadio, guestTypes) {
@@ -94,11 +112,13 @@ const observer = new MutationObserver(async (mutationsList, observer) => {
 	for (let mutation of mutationsList) {
 		if (mutation.type === 'childList') {
 			const spans = Array.from(document.getElementsByTagName('span'))
-			const groupRadio = spans.filter((span) => span.innerText === '团体')[0].parentElement
-			const submitBtn = spans.filter((span) => span.innerText === '上报(R)')[0].parentElement
-			const guestTypes = Array.from(spans.filter((span) => span.innerText === '内地旅客')[0].parentElement.parentElement.querySelectorAll('.el-radio'))
+			const groupRadio = spans.find((span) => span.innerText === '团体').parentElement
+			const submitBtn = spans.find((span) => span.innerText === '上报(R)').parentElement
+			const closeBtn = spans.find((span) => span.innerText === '关 闭(Esc)').parentElement
+			const guestTypes = Array.from(spans.find((span) => span.innerText === '内地旅客').parentElement.parentElement.querySelectorAll('.el-radio'))
 
 			addSaveGuestInfo(guestTypes, submitBtn, 'r')
+			addCloseAndClearTextArea(closeBtn)
 
 			try {
 				const saveBtn = spans.filter((span) => span.innerText === '保存(S)')[0].parentElement
